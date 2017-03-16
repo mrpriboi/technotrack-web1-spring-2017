@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h1><a href="{% url "blog:allblogs" %}">All blogs here</a></h1>
+    <b>{{ blog.id }}</b>
+    <p>{{ blog.caption }}</p>
+    <p>{{ blog.content }}</p>
+
+    {% if object.post_set %}
+    <div>
+    <h1>Постики</h1>
+    {% for post in object.post_set.all %}
+        <div><i><a href="{% url "blog:post_page" pk=post.id %}">{{ post.content }}</a></i></div>
+    {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}
