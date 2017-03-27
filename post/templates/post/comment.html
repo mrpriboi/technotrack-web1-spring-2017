@@ -7,7 +7,7 @@
     Comments:
         <div>
         {% for comment in object.comments.all %}
-                <i>{{ comment.content }}</i>
+               <div> <i>{{ comment.content }}</i> </div>
         {%  endfor %}
         </div>
 {% endblock %}
