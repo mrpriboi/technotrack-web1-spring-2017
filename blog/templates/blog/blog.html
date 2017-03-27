@@ -1,7 +1,13 @@
 {% extends "core/base.html" %}
 
 {% block content %}
+    <h2><div>{% if user.is_anonymous %}<a href="{% url "core:login" %}">Login</a>{% endif %}</div></h2>
+    <h1><div>{{ user.username }}</div></h1>
+    {% if user.is_authenticated %}<a href="{% url "core:logout" %}">Exit</a>{% endif %}
     <h1><a href="{% url "blog:allblogs" %}">All blogs here</a></h1>
+
+    <b>{% if user == blog.author %}<a href={% url "blog:editblog" pk=blog.id %}> EditIt</a>{% endif %}</b>
+
     <b>{{ blog.id }}</b>
     <p>{{ blog.caption }}</p>
     <p>{{ blog.content }}</p>

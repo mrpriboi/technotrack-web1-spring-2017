@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 from post.models import Comment
 from django.views.generic.edit import FormView
 from core.forms import UserRegistration
-#from django.shortcuts import redirect
+from django.shortcuts import resolve_url
 
 
 # Create your views here.
@@ -25,12 +25,14 @@ class HomePageView(TemplateView):
 
 class RegisterFormView(FormView):
     form_class = UserRegistration
-    success_url = "core:login"
     template_name = "core/register.html"
 
     def form_valid(self, form):
         form.save()
         return super(RegisterFormView, self).form_valid(form)
+
+    def get_success_url(self):
+        return resolve_url('core:login')
 
 
     #def register_user(request):
