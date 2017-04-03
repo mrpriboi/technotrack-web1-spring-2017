@@ -11,12 +11,18 @@
     <b>{{ blog.id }}</b>
     <p>{{ blog.caption }}</p>
     <p>{{ blog.content }}</p>
+    {% for category in blog.category.all %}
+            <div>{{ category }}</div>
+    {% endfor %}
 
     {% if object.post_set %}
     <div>
     <h1>Постики</h1>
     {% for post in object.post_set.all %}
-        <div><i><a href="{% url "blog:post_page" pk=post.id %}">{{ post.content }}</a></i></div>
+        <div><i><a href="{% url "blog:post_page" pk=post.id %}">{{ post.content }}</a></i> </div>
+        {% if user == blog.author %}
+                <div> <a href={% url "blog:editpost" pk=post.id %}>Редактировать Post</a></div>
+        {% endif %}
     {% endfor %}
     </div>
     {% endif %}

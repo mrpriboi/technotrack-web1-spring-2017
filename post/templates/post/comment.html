@@ -9,6 +9,10 @@
     <h2><a href={% url "blog:allblogs" %}>All blogs</a> </h2>
     <b>{{ object.id }} POST</b>
     <p>{{ object.content }}</p>
+
+    {% if user.is_authenticated %}
+        <br><a href="{% url "post:createcomment" pk=object.id %}">Создать новый комментарий</a></br>
+    {% endif %}
     Comments:
         <div>
         {% for comment in object.comments.all %}

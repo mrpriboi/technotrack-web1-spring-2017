@@ -35,3 +35,4 @@ class Post(models.Model):
 class Like(models.Model):
 	author = models.ForeignKey(settings.AUTH_USER_MODEL)
 	created_at = models.DateTimeField(auto_now_add=True)
+	post = models.ForeignKey(Post)
