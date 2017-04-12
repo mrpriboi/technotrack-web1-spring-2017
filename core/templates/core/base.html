@@ -1,2 +1,56 @@
-{% block title %}{% endblock %}
+{% load static %}
+
+
+<html>
+
+<title>SuperBlog</title>
+
+<head>
+<title>{% block title %}{% endblock %}</title>
+        <link href="{% static "core/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+    {% block extra %}{% endblock %}
+</head>
+
+<nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+              <a class="navbar-brand" href="{% url "core:home" %}">Home</a>
+            </div>
+<!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url "blog:allblogs" %}">Blogs</a></li>
+      </ul>
+    {% if user.is_authenticated %}
+        <ul class="nav navbar-nav">
+            <li><a href="{% url "blog:createblog" %}">Create new blog</a></li>
+        </ul>
+    {% endif %}
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_anonymous %}<li><a href="{% url "core:login" %}">Login</a></li>{% endif %}
+        {% if user.is_anonymous %}<li><a href="{% url "core:register" %}">Register</a></li>{% endif %}
+     {% if user.is_authenticated %}<p class="navbar-text">{{ user.username }}:</p><li><a href="{% url "core:logout" %}">exit</a>{% endif %}</li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
 {% block content %}{% endblock %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    <footer class="footer">
+      <div class="container">
+        <p class="text-right">Just a site ©</p>
+      </div>
+    </footer>
+  </div>
+</div>
+
+</html>

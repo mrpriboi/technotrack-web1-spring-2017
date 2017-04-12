@@ -1,29 +1,43 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block extra %}
+    <link href="{% static "blog/blogpage.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-    <h2><div>{% if user.is_anonymous %}<a href="{% url "core:login" %}">Login</a>{% endif %}</div></h2>
-    <h1><div>{{ user.username }}</div></h1>
-    {% if user.is_authenticated %}<a href="{% url "core:logout" %}">Exit</a>{% endif %}
-    <h1><a href="{% url "blog:allblogs" %}">All blogs here</a></h1>
-
-    <b>{% if user == blog.author %}<a href={% url "blog:editblog" pk=blog.id %}> EditIt</a>{% endif %}</b>
-
-    <b>{{ blog.id }}</b>
-    <p>{{ blog.caption }}</p>
-    <p>{{ blog.content }}</p>
+    {% if user == blog.author %}
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="{% url "blog:editblog" pk=blog.id %}">Edit this blog</a></li>
+    </ul>
+    {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3>{{ blog.caption }}</h3><p class="text-left">{{ blog.author }}</p></div>
+            <div class="panel-body">
+               {{ blog.content }}
+            </div>
+    </div>
+    <div class="well well-sm">
+    <p>Сategories:</p>
     {% for category in blog.category.all %}
-            <div>{{ category }}</div>
-    {% endfor %}
-
-    {% if object.post_set %}
-    <div>
-    <h1>Постики</h1>
-    {% for post in object.post_set.all %}
-        <div><i><a href="{% url "blog:post_page" pk=post.id %}">{{ post.content }}</a></i> </div>
-        {% if user == blog.author %}
-                <div> <a href={% url "blog:editpost" pk=post.id %}>Редактировать Post</a></div>
-        {% endif %}
+            <b>{{ category }}</b>
     {% endfor %}
     </div>
+
+    {% if object.post_set %}
+        <ul class="list-group">
+        <div class="list-group">
+            <a href="#" class="list-group-item active">
+                Список постов
+            </a>
+            {% for post in object.post_set.all %}
+                <div class="blogdiv"><a href={% url "blog:post_page" pk=post.id %} class="list-group-item">{{ post.content }}</a></div>
+                <div>{% if user == blog.author %}<li class="list-group-item blogstring"><a href={% url "blog:editpost" pk=post.id %}>Редактировать</a></li>{% endif %}</div>
+            {% endfor %}
+
+            <div class="clearfix"></div>
+        </div>
+        </ul>
     {% endif %}
+
 {% endblock %}

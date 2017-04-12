@@ -3,7 +3,16 @@
 {% block content %}
     <form method="post">
         {% csrf_token %}
-        {{ form }}
-    <input type="submit">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Login</div>
+          <div class="panel-body">
+            {% for field in form %}
+                    <div>{{ field.label }}:{{ field }}</div>
+                {% endfor %}
+            <input type="submit">
+          </div>
+    </div>
     </form>
 {% endblock %}
+
+

@@ -20,7 +20,7 @@ from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^blogs/', include('blog.urls', namespace="blog")),
+    url(r'^blog/', include('blog.urls', namespace="blog")),
     url(r'^core/', include('core.urls', namespace="core")),
-    url(r'^comments/', include('post.urls', namespace="post")),
+    url(r'^post/', include('post.urls', namespace="post")),
 ]

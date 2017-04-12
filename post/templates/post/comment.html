@@ -1,22 +1,33 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block extra %}
+    <link href="{% static "post/postpage.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-    <h2><div>{% if user.is_anonymous %}<a href="{% url "core:login" %}">Login</a>{% endif %}</div></h2>
-    <h1><div>{{ user.username }}</div></h1>
-    {% if user.is_authenticated %}<a href="{% url "core:logout" %}">Exit</a>{% endif %}
 
-
-    <h2><a href={% url "blog:allblogs" %}>All blogs</a> </h2>
-    <b>{{ object.id }} POST</b>
-    <p>{{ object.content }}</p>
-
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>POST</h4></div>
+            <div class="panel-body postdiv">
+               {{ object.content }}
+            </div>
+    </div>
     {% if user.is_authenticated %}
-        <br><a href="{% url "post:createcomment" pk=object.id %}">Создать новый комментарий</a></br>
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="{% url "post:createcomment" pk=object.id %}">Создать новый комментарий</a></li>
+    </ul>
     {% endif %}
-    Comments:
-        <div>
-        {% for comment in object.comments.all %}
-               <div> <i>{{ comment.content }}</i> </div>
-        {%  endfor %}
-        </div>
+
+    <div class="list-group">
+            <a href="#" class="list-group-item active">
+                Список комментариев:
+            </a>
+            <div>
+            {% for comment in object.comments.all %}
+                <li class="list-group-item postdiv"><br>{{ comment.content }}</br></li>
+            {% endfor %}
+            </div>
+    </div>
 {% endblock %}
+

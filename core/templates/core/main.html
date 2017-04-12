@@ -1,14 +1,18 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-    <h2><div>{% if user.is_anonymous %}<a href="{% url "core:login" %}">Login</a>{% endif %}</div></h2>
-    <h1><div>{{ user.username }}</div></h1>
-    {% if user.is_authenticated %}<a href="{% url "core:logout" %}">Exit</a>{% endif %}
-    <h1><div>Главная страница сайта</div></h1>
-    <div>Всего блогов:{{ blogs_count }}</div>
-    <div>Всего постов:{{ posts_count }}</div>
-    <div>Всего комментариев:{{ comment_count }}</div>
-    <div><h1><a href="{% url "blog:allblogs" %}">All blogs</a></h1></div>
+    <div class="page-header">
+        <h1>Main page <small>Welcome!</small></h1>
+    </div>
+    <div class="jumbotron">
+          <h2>Главная страница сайта</h2>
+          <p>
+              <div>Всего блогов:<span class="badge">{{ blogs_count }}</span></div>
+                <div>Всего постов:<span class="badge">{{ posts_count }}</span></div>
+                <div>Всего комментариев:<span class="badge">{{ comment_count }}</span></div>
+          </p>
+          <p><a class="btn btn-primary btn-lg" href="{% url "blog:allblogs" %}" role="button">Все блоги</a></p>
+    </div>
 {% endblock %}
 
 

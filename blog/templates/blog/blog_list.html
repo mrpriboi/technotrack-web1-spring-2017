@@ -1,26 +1,39 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block extra %}
+    <link href="{% static "blog/blogpage.css" %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-    <h2><div>{% if user.is_anonymous %}<a href="{% url "core:login" %}">Login</a>{% endif %}</div></h2>
-    <h1><div>{{ user.username }}</div></h1>
-    {% if user.is_authenticated %}<a href="{% url "core:logout" %}">Exit</a>{% endif %}
-
-    <div><h2>{% if user.is_authenticated %}<a href="{% url "blog:createblog" %}">Make new blog</a>{% endif %}</h2></div>
-
-    <div><h2>{% if user.is_authenticated %}<a href="{% url "blog:createpost" %}">Make new post</a>{% endif %}</h2></div>
+    {% if user.is_authenticated %}
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="{% url "blog:createblog" %}">Create new blog</a></li>
+      <li role="presentation" class="active"><a href="{% url "blog:createpost" %}">Create new post</a></li>
+    </ul>
+    {% endif %}
 
     <div>
         <form method="get" action="{% url "blog:allblogs" %}">
-            {{ sortform.sort.label_tag }}{{ sortform.sort }}
-            {{ sortform.search.label_tag }}{{ sortform.search }}
+            <div><b>Сортировка</b></div>{{ sortform.sort }}
+            <div><b>Поиск по названию</b></div>{{ sortform.search }}
             <input type="submit">
         </form>
     </div>
 
-    <h1><div>Список блогов</div></h1>
-    {% for blog in object_list %}
-        <div>
-            <div><a href={% url "blog:oneblog" pk=blog.id %}>{{ blog.caption }}</a><b>{% if user == blog.author %}<a href={% url "blog:editblog" pk=blog.id %}> EditIt</a>{% endif %}</b></div>
-        </div>
-    {% endfor %}
+    <ul class="list-group">
+    <div class="list-group">
+        <a href="#" class="list-group-item active">
+            Список блогов
+        </a>
+        {% for blog in object_list %}
+            <div class="blogdiv"><a href={% url "blog:oneblog" pk=blog.id %} class="list-group-item">{{ blog.caption }}</a></div>
+            {% if user == blog.author %}<div><li class="list-group-item blogstring"><a href="{% url "blog:editblog" pk=blog.id %}">Edit</a></li></div>{% endif %}
+        {% endfor %}
+
+    <div class="clearfix"></div>
+    </div>
+    </ul>
+
+
 {% endblock %}
