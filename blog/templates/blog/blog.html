@@ -6,9 +6,11 @@
 {% endblock %}
 
 {% block content %}
+    <article>
     {% if user == blog.author %}
     <ul class="nav nav-pills">
       <li role="presentation" class="active"><a href="{% url "blog:editblog" pk=blog.id %}">Edit this blog</a></li>
+        <li role="presentation" class="active"><a href="{% url "blog:createpostfromblog" pk=blog.id %}">Create new post</a></li>
     </ul>
     {% endif %}
     <div class="panel panel-default">
@@ -31,13 +33,13 @@
                 Список постов
             </a>
             {% for post in object.post_set.all %}
-                <div class="blogdiv"><a href={% url "blog:post_page" pk=post.id %} class="list-group-item">{{ post.content }}</a></div>
-                <div>{% if user == blog.author %}<li class="list-group-item blogstring"><a href={% url "blog:editpost" pk=post.id %}>Редактировать</a></li>{% endif %}</div>
+                <div class="blogdiv"><a href={% url "blog:post_page" pk=post.id %} class="list-group-item">{{ post.title }}</a></div>
+                <div>{% if user == blog.author %}<li class="list-group-item blogstring"><a href={% url "blog:editpost" pk=post.id %}>Edit</a></li>{% endif %}</div>
             {% endfor %}
 
             <div class="clearfix"></div>
         </div>
         </ul>
     {% endif %}
-
+    </article>
 {% endblock %}

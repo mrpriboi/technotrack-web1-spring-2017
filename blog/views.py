@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.views.generic import ListView,DetailView, CreateView, UpdateView
 from blog.models import Blog, Post
 from django import forms
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url,get_object_or_404
 
 # Create your views here.
 
@@ -72,7 +72,7 @@ class EditBlog(UpdateView):
 class AddPost(CreateView):
     template_name = "blog/createpost.html"
     model = Post
-    fields = ('content','blog')
+    fields = ('title','content','blog')
 
     def get_success_url(self):
         return resolve_url('blog:post_page', pk=self.object.pk)
@@ -90,7 +90,7 @@ class EditPost(UpdateView):
 
     template_name = 'blog/editpost.html'
     model = Post
-    fields = ('content',)
+    fields = ('title','content',)
 
     def get_queryset(self):
         return super(EditPost, self).get_queryset().filter(author=self.request.user)
@@ -108,3 +108,26 @@ class SortForm(forms.Form):
         required=False, widget=forms.RadioSelect
     )
     search = forms.CharField(required=False, widget=forms.TextInput)
+
+class AddPostFromBlog(CreateView):
+    template_name = "blog/createpostfromblog.html"
+    model = Post
+    fields = ('title','content',)
+    blog = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.blog = get_object_or_404(Blog, id=kwargs['pk'])
+        return super(AddPostFromBlog, self).dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return resolve_url('blog:post_page', pk=self.object.pk)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.blog = self.blog
+        return super(AddPostFromBlog, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddPostFromBlog, self).get_context_data(**kwargs)
+        context['blog'] = self.blog
+        return context

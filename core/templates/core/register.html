@@ -1,11 +1,13 @@
 {% extends "core/base.html" %}
 
 {% block content %}
+    <article>
     <form method="post">
         {% csrf_token %}
         <div class="panel panel-primary">
           <div class="panel-heading">Registration</div>
           <div class="panel-body">
+            {{ form.errors }}
             {% for field in form %}
                     <div>{{ field.label }}:{{ field }}</div>
                 {% endfor %}
@@ -13,4 +15,5 @@
           </div>
     </div>
     </form>
+    </article>
 {% endblock %}

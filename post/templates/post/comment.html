@@ -6,9 +6,16 @@
 {% endblock %}
 
 {% block content %}
+    <article>
+
+    {% if user == post.author %}
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="{% url "blog:editpost" pk=post.id %}">Edit this post</a></li>
+    </ul>
+    {% endif %}
 
     <div class="panel panel-default">
-        <div class="panel-heading"><h4>POST</h4></div>
+        <div class="panel-heading"><h4>{{ post.title }}</h4></div>
             <div class="panel-body postdiv">
                {{ object.content }}
             </div>
@@ -29,5 +36,7 @@
             {% endfor %}
             </div>
     </div>
+
+    </article>
 {% endblock %}
 

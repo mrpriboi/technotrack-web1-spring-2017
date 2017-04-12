@@ -28,9 +28,10 @@ class Post(models.Model):
 	blog = models.ForeignKey(Blog)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
+	title = models.CharField(max_length=50, default="NameOfPost")
 
 	def __unicode__(self):
-		return self.content
+		return self.title
 
 class Like(models.Model):
 	author = models.ForeignKey(settings.AUTH_USER_MODEL)

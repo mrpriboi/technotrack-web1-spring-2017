@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/$', CommentView.as_view(), name="post_page"),
     url(r'^blog/(?P<pk>\d+)/edit/post/$', EditPost.as_view(), name="editpost"),
     url(r'^addpost/$', login_required(AddPost.as_view()), name="createpost"),
+    url(r'^(?P<pk>\d+)/addpost/$', login_required(AddPostFromBlog.as_view()), name="createpostfromblog"),
 ]

@@ -34,9 +34,9 @@
         </ul>
     {% endif %}
       <ul class="nav navbar-nav navbar-right">
-        {% if user.is_anonymous %}<li><a href="{% url "core:login" %}">Login</a></li>{% endif %}
+        {% if user.is_anonymous %}<li><a href="{% url "core:login" %}?next={{ request.path }}">Login</a></li>{% endif %}
         {% if user.is_anonymous %}<li><a href="{% url "core:register" %}">Register</a></li>{% endif %}
-     {% if user.is_authenticated %}<p class="navbar-text">{{ user.username }}:</p><li><a href="{% url "core:logout" %}">exit</a>{% endif %}</li>
+     {% if user.is_authenticated %}<p class="navbar-text">{{ user.username }}:</p><li><a href="{% url "core:logout" %}?next={{ request.path }}">exit</a>{% endif %}</li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
