@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+<head>
+</head>
+
+<body>
+{% block content %}
+    <article>
+    <form action="{% url "blog:createpost" %}" method="post">
+    {% csrf_token %}
+    <div class="panel panel-primary">
+          <div class="panel-heading">Create new post</div>
+          <div class="panel-body">
+            {{ form.errors }}
+            {% for field in form %}
+                    <div>{{ field.label }}:{{ field }}</div>
+                {% endfor %}
+            <input type="submit">
+          </div>
+    </div>
+    </form>
+    </article>
+{% endblock %}
+</body>
+
+</html>

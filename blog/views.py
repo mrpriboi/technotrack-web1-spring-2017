@@ -1,9 +1,9 @@
 # coding: utf-8
 from django.db.models import Q
 from django.views.generic import ListView,DetailView, CreateView, UpdateView
-from blog.models import Blog, Post
+from blog.models import Blog, Post, Like
 from django import forms
-from django.shortcuts import resolve_url,get_object_or_404
+from django.shortcuts import resolve_url,get_object_or_404, HttpResponse
 
 # Create your views here.
 
@@ -86,6 +86,23 @@ class AddPost(CreateView):
         form.fields["blog"].queryset = Blog.objects.all().filter(author=self.request.user)
         return form
 
+class CreatePost(CreateView):
+    template_name = "blog/addpost.html"
+    model = Post
+    fields = ('title','content','blog')
+
+    def get_success_url(self):
+        return resolve_url('blog:post_page', pk=self.object.pk)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(CreatePost,self).form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super(CreatePost,self).get_form()
+        form.fields["blog"].queryset = Blog.objects.all().filter(author=self.request.user)
+        return form
+
 class EditPost(UpdateView):
 
     template_name = 'blog/editpost.html'
@@ -131,3 +148,18 @@ class AddPostFromBlog(CreateView):
         context = super(AddPostFromBlog, self).get_context_data(**kwargs)
         context['blog'] = self.blog
         return context
+
+def likepost(request, pk=None):
+    post = get_object_or_404(Post, id=pk)
+    if request.user.is_authenticated:
+        like = Like.objects.filter(post=post, author=request.user).first()
+        if not like:
+            like = Like(post=post, author=request.user)
+            like.save()
+        else:
+            like.delete()
+    return HttpResponse(Like.objects.filter(post=post).count())
+
+def countlikes(request, pk=None):
+    post = get_object_or_404(Post, id=pk)
+    return HttpResponse(Like.objects.filter(post=post).count())

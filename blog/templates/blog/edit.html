@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load widget_tweaks %}
 
 {% block content %}
     <article>
@@ -9,7 +10,11 @@
           <div class="panel-body">
             {{ form.errors }}
             {% for field in form %}
-                    <div>{{ field.label }}:{{ field }}</div>
+                {% if field.label == "Category" %}
+                     <div class="form-group"><label for="id_categories">Categories</label>{{ form.category|add_class:"form-control catselect" }}</div>
+                {% else %}
+                    <div><label>{{ field.label }}</label>:{{ field|add_class:"form-control" }}</div>
+                {% endif %}
                 {% endfor %}
             <input type="submit">
           </div>

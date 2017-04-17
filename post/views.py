@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404,resolve_url
+from django.shortcuts import get_object_or_404,resolve_url,HttpResponse
 from django.views.generic import CreateView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
 from .models import Post,Comment
+from blog.models import Like
 
 class CommentView(DetailView):
     queryset = Post.objects.all()
@@ -30,3 +31,7 @@ class CreateComment(CreateView):
 
     def get_success_url(self):
         return resolve_url('blog:post_page', pk=self.object.post.pk)
+
+class PostCommentView(DetailView):
+    queryset = Post.objects.all()
+    template_name = 'post/commentsdiv.html'

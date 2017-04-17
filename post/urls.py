@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import CommentView, CreateComment
+from .views import CommentView, CreateComment, PostCommentView
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [

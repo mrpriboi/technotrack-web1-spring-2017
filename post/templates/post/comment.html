@@ -17,23 +17,22 @@
     <div class="panel panel-default">
         <div class="panel-heading"><h4>{{ post.title }}</h4></div>
             <div class="panel-body postdiv">
-               {{ object.content }}
+               {{ post.content }}
             </div>
     </div>
     {% if user.is_authenticated %}
     <ul class="nav nav-pills">
-      <li role="presentation" class="active"><a href="{% url "post:createcomment" pk=object.id %}">Создать новый комментарий</a></li>
+      <li role="presentation" class="active"><a href="{% url "post:createcomment" pk=post.id %}">Создать новый комментарий</a></li>
     </ul>
+    <div>Количество лайков поста <div class="countlikes">{{post.like_set.count}} </div></div>
+        <button class="btn btn-primary likebutton" data-url={% url "blog:likepost" pk=post.id %}>Лайкнуть</button>
     {% endif %}
 
     <div class="list-group">
             <a href="#" class="list-group-item active">
                 Список комментариев:
             </a>
-            <div>
-            {% for comment in object.comments.all %}
-                <li class="list-group-item postdiv"><br>{{ comment.content }}</br></li>
-            {% endfor %}
+            <div class="commentsdiv" data-url="{% url "blog:comments" pk=post.id %}">
             </div>
     </div>
 

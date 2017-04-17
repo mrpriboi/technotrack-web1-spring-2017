@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block extra %}
     <link href="{% static "blog/blogpage.css" %}" rel="stylesheet">
@@ -10,14 +11,28 @@
     {% if user.is_authenticated %}
     <ul class="nav nav-pills">
       <li role="presentation" class="active"><a href="{% url "blog:createblog" %}">Create new blog</a></li>
-      <li role="presentation" class="active"><a href="{% url "blog:createpost" %}">Create new post</a></li>
+      <li role="presentation" class="active showModal" data-url="{% url "blog:addpostmodal" %}">Create new post</li>
     </ul>
     {% endif %}
 
-    <div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Creating new post</h4>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
         <form method="get" action="{% url "blog:allblogs" %}">
-            <div><b>Сортировка</b></div>{{ sortform.sort }}
-            <div><b>Поиск по названию</b></div>{{ sortform.search }}
+            <div><b>Сортировка</b></div>{{ sortform.sort}}
+            <div><b>Поиск по названию</b></div>{{ sortform.search|add_class:"form-control" }}
             <input type="submit">
         </form>
     </div>
