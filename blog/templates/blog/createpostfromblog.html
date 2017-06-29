@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load widget_tweaks %}
 
 {% block content %}
     <article>
@@ -9,7 +10,11 @@
           <div class="panel-body">
             {{ form.errors }}
             {% for field in form %}
-                    <div>{{ field.label }}:{{ field }}</div>
+                    {% if field.label == 'Is published' %}
+                        <div>{{ field.label }}:{{ field }}</div>
+                    {% else %}
+                    <div>{{ field.label }}:{{ field|add_class:"form-control" }}</div>
+                    {% endif %}
                 {% endfor %}
             <input type="submit">
           </div>

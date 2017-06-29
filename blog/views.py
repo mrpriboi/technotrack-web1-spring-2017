@@ -41,6 +41,11 @@ class BlogView(DetailView):
     queryset = Blog.objects.all()
     template_name = "blog/blog.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(BlogView, self).get_context_data(**kwargs)
+        context['post_list'] = Post.objects.filter(blog_id=self.object.pk).active_posts(self.request.user)
+        return context
+
 #class BlogForm(forms.ModelForm):
 #    class Meta:
 #        model = Blog
@@ -107,7 +112,7 @@ class EditPost(UpdateView):
 
     template_name = 'blog/editpost.html'
     model = Post
-    fields = ('title','content',)
+    fields = ('title','content','is_published')
 
     def get_queryset(self):
         return super(EditPost, self).get_queryset().filter(author=self.request.user)
@@ -129,7 +134,7 @@ class SortForm(forms.Form):
 class AddPostFromBlog(CreateView):
     template_name = "blog/createpostfromblog.html"
     model = Post
-    fields = ('title','content',)
+    fields = ('title','content','is_published')
     blog = None
 
     def dispatch(self, request, *args, **kwargs):

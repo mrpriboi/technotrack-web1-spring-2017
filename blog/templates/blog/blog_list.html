@@ -1,6 +1,7 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% load widget_tweaks %}
+{% load cache %}
 
 {% block extra %}
     <link href="{% static "blog/blogpage.css" %}" rel="stylesheet">
@@ -11,7 +12,7 @@
     {% if user.is_authenticated %}
     <ul class="nav nav-pills">
       <li role="presentation" class="active"><a href="{% url "blog:createblog" %}">Create new blog</a></li>
-      <li role="presentation" class="active showModal" data-url="{% url "blog:addpostmodal" %}">Create new post</li>
+      <li role="presentation" class="btn btn-primary showModal" data-url="{% url "blog:addpostmodal" %}">Create new post</li>
     </ul>
     {% endif %}
 
@@ -42,10 +43,12 @@
         <a href="#" class="list-group-item active">
             Список блогов
         </a>
+        {% cache 10 "blogscache"  %}
         {% for blog in object_list %}
             <div class="blogdiv"><a href={% url "blog:oneblog" pk=blog.id %} class="list-group-item">{{ blog.caption }}</a></div>
             {% if user == blog.author %}<div><li class="list-group-item blogstring"><a href="{% url "blog:editblog" pk=blog.id %}">Edit</a></li></div>{% endif %}
         {% endfor %}
+        {% endcache %}
 
     <div class="clearfix"></div>
     </div>

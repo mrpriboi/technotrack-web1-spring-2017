@@ -11,21 +11,25 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from ConfigParser import RawConfigParser
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+config = RawConfigParser()
+config.read(os.path.join(BASE_DIR, '../conf/project.conf'))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'aczig%y2nc@+g44b=12d%%&%i!=2fc@!%2w+zzz80@r4j@#pyi'
+SECRET_KEY = config.get('global','SECRE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['superblog.ru', 'superblog', '127.0.0.1']
 
 
 # Application definition
@@ -37,11 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'core.apps.CoreConfig',
     'blog.apps.BlogConfig',
     'post.apps.PostConfig',
     'crispy_forms',
-    'widget_tweaks'
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +57,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+    '192.168.0.1',
+]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
 
 ROOT_URLCONF = 'application.urls'
 
@@ -81,9 +96,9 @@ WSGI_APPLICATION = 'application.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ForStuding',
-        'USER': 'mrpriboi',
-        'PASSWORD': 'Mysql97',
+        'NAME': config.get('database','DATANAME'),
+        'USER': config.get('database','DATAUSER'),
+        'PASSWORD': config.get('database','DATAPASS'),
         'HOST':'localhost',
     }
 }
@@ -126,6 +141,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '../collected_static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, '../src/blog/static'), os.path.join(BASE_DIR, '../src/core/static'), os.path.join(BASE_DIR, '../src/post/static'), )
 
 
 AUTH_USER_MODEL = 'core.User'
@@ -133,3 +150,42 @@ AUTH_USER_MODEL = 'core.User'
 LOGIN_URL = 'core:login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'core:home'
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file':{
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, '../logs/django.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console','file'],
+            'level': 'DEBUG',
+        },
+    }
+}

@@ -1,4 +1,7 @@
+{% load cache %}
 
+{% cache 10 "commentscache"  %}
 {% for comment in object.comments.all %}
                 <li class="list-group-item postdiv"><br>{{ comment.content }}</br></li>
 {% endfor %}
+{% endcache %}
